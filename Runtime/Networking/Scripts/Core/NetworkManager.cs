@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.Events;
-
+using Riptide;
+using System;
+using Riptide.Utils;
 namespace KadenZombie8.BIMOS.Networking {
     [DefaultExecutionOrder(-1500)]
     public class NetworkManager : MonoBehaviour {
-        /*
         private static NetworkManager _singleton;
         public static NetworkManager Singleton {
             get => _singleton;
@@ -18,8 +19,8 @@ namespace KadenZombie8.BIMOS.Networking {
             }
         }
 
-        [SerializeField] private ushort port;
-        [SerializeField] private ushort maxPlayers;
+        public ushort Port = 7777;
+        public ushort MaxPlayers = 10;
 
         public Server Server {
             get; private set;
@@ -37,7 +38,6 @@ namespace KadenZombie8.BIMOS.Networking {
 
             Server = new Server();
             Server.ClientConnected += PlayerJoined;
-            Server.RelayFilter = new MessageRelayFilter(typeof(MessageId), MessageId.SpawnPlayer, MessageId.PlayerMovement);
 
             Client = new Client();
             Client.Connected += DidConnect;
@@ -58,50 +58,55 @@ namespace KadenZombie8.BIMOS.Networking {
             Client.Disconnect();
         }
 
-        internal void StartHost() {
-            Server.Start(port, maxPlayers);
-            Client.Connect($"127.0.0.1:{port}");
+        public bool StartServer(bool asHost) {
+            StartServer();
+            if(asHost) return true;
+            return JoinGame("127.0.0.1");
         }
 
-        internal void JoinGame(string ipString) {
-            Client.Connect($"{ipString}:{port}");
+        public void StartServer() {
+            Server.Start(Port, MaxPlayers);
+            onStartServer?.Invoke();
         }
 
-        internal void LeaveGame() {
-            Server.Stop();
+        public bool JoinGame(string ipString) {
+            bool connected = Client.Connect($"{ipString}:{Port}");
+            if (!connected)
+                connected = Client.Connect($"127.0.0.1");
+            return connected;
+        }
+
+        public void LeaveGame() {
+            if (Server.IsRunning) {
+                Server.Stop();
+                onStopServer?.Invoke();
+            }
             Client.Disconnect();
         }
 
         private void DidConnect(object sender, EventArgs e) {
-            Player.Spawn(Client.Id, UIManager.Singleton.Username, Vector3.zero, true);
+            onStartClient?.Invoke();
         }
 
         private void FailedToConnect(object sender, EventArgs e) {
-            UIManager.Singleton.BackToMain();
         }
 
         private void PlayerJoined(object sender, ServerConnectedEventArgs e) {
-            foreach (Player player in Player.List.Values)
+            foreach (var player in NetworkRig.Rigs.Values)
                 if (player.Id != e.Client.Id)
                     player.SendSpawn(e.Client.Id);
         }
 
         private void PlayerLeft(object sender, ClientDisconnectedEventArgs e) {
-            Destroy(Player.List[e.Id].gameObject);
+            Destroy(NetworkRig.Rigs[e.Id].gameObject);
         }
 
         private void DidDisconnect(object sender, DisconnectedEventArgs e) {
-            foreach (Player player in Player.List.Values)
+            onStopClient?.Invoke();
+            foreach (NetworkRig player in NetworkRig.Rigs.Values)
                 Destroy(player.gameObject);
-
-            UIManager.Singleton.BackToMain();
         }
         public UnityEvent onStartServer, onStopServer, onStartClient, onStopClient;
-        public override void OnStartServer() => onStartServer?.Invoke();
-        public override void OnStartClient() => onStartClient?.Invoke();
-        public override void OnStopServer() => onStopServer?.Invoke();
-        public override void OnStopClient() => onStopClient?.Invoke();
-        */
     }
         
 }

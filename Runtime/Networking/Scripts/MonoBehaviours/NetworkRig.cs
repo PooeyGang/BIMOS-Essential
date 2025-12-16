@@ -1,6 +1,7 @@
 using KadenZombie8.BIMOS.Rig;
 using KadenZombie8.BIMOS.Rig.Spawning;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -9,9 +10,11 @@ namespace KadenZombie8.BIMOS.Networking
     [RequireComponent(typeof(BIMOSRig))]
     public class NetworkRig : MonoBehaviour
     {
+        public static Dictionary<ushort, NetworkRig> Rigs;
         public BIMOSRig Rig {
-            get; private set;
+            get; internal set;
         }
+        public ushort Id { get; internal set; }
         public HandInputReaderStruct LeftReaderStruct;
         public HandInputReaderStruct RightReaderStruct;
         public HandInputReader LeftHandReader;
@@ -52,6 +55,10 @@ namespace KadenZombie8.BIMOS.Networking
         private void CmdUpdateReaders(HandInputReaderStruct leftReader, HandInputReaderStruct rightReader) {
             LeftReaderStruct = leftReader;
             RightReaderStruct = rightReader;
+        }
+
+        internal void SendSpawn(ushort id) {
+            throw new NotImplementedException();
         }
     }
 
