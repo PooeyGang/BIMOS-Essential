@@ -4,7 +4,7 @@ using Mirror;
 using UnityEngine;
 
 namespace KadenZombie8.BIMOS.Networking.Samples {
-    public class GamemodePlayer : NetworkBehaviour {
+    public class GamemodePlayer : MonoBehaviour {
         public float MaxHealth = 30;
         public float Health { get; set; } = new();
         public uint Kills { get; set; } = new();

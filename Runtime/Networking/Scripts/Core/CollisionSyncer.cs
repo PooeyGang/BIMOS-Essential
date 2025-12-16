@@ -1,15 +1,12 @@
-using Mirror;
-using System;
 using UnityEngine;
 using KadenZombie8.BIMOS.SDK;
 namespace KadenZombie8.BIMOS.Networking
 {
     [RequireComponent(typeof(Collider))]
-    public class CollisionSyncer : MonoBehaviourNetwork
+    public class CollisionSyncer : MonoBehaviour
     {
         public bool authorityOnCollision = false;
         public float thresholdImpulse = 0.1f;
-        public override bool HostIsOwnerDefault => true;
         public BIMOSBody Body {
             get; set;
         }
@@ -35,20 +32,9 @@ namespace KadenZombie8.BIMOS.Networking
             CollisionCmd(info);
         }
 
-        [Command(requiresAuthority = false)]
-        public void CollisionCmd(BodyInfo info, NetworkConnectionToClient conn = null) {
-            if (!authorityOnCollision && conn != connectionToClient)
-                return;
-            else if (authorityOnCollision) {
-                netIdentity.RemoveClientAuthority();
-                netIdentity.AssignClientAuthority(conn);
-            }
-            if (!NetworkClient.active) {
-                info.Deserialize(Body);
-            }
+        private void CollisionCmd(BodyInfo info) {
             CollisionRpc(info);
         }
-        [ClientRpc]
         private void CollisionRpc(BodyInfo info) {
             info.Deserialize(Body);
         }

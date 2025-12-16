@@ -1,42 +1,107 @@
-using KadenZombie8.BIMOS.Rig;
-using KadenZombie8.Pooling;
-using Mirror;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 namespace KadenZombie8.BIMOS.Networking {
     [DefaultExecutionOrder(-1500)]
-    public class NetworkManager : Mirror.NetworkManager {
-        public static NetworkManager Instance {
+    public class NetworkManager : MonoBehaviour {
+        /*
+        private static NetworkManager _singleton;
+        public static NetworkManager Singleton {
+            get => _singleton;
+            private set {
+                if (_singleton == null)
+                    _singleton = value;
+                else if (_singleton != value) {
+                    Debug.Log($"{nameof(NetworkManager)} instance already exists, destroying object!");
+                    Destroy(value);
+                }
+            }
+        }
+
+        [SerializeField] private ushort port;
+        [SerializeField] private ushort maxPlayers;
+
+        public Server Server {
             get; private set;
         }
-        public static bool IsNetworkActive => NetworkServer.active || NetworkClient.active;
-        public override void Awake() {
-            InitializeOnce();
-            base.Awake();
+        public Client Client {
+            get; private set;
         }
 
-        public virtual void InitializeOnce() {
-            SetProperties();
-            Register();      
+        private void Awake() {
+            Singleton = this;
         }
 
-        public virtual void SetProperties() {
+        private void Start() {
+            RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError, false);
+
+            Server = new Server();
+            Server.ClientConnected += PlayerJoined;
+            Server.RelayFilter = new MessageRelayFilter(typeof(MessageId), MessageId.SpawnPlayer, MessageId.PlayerMovement);
+
+            Client = new Client();
+            Client.Connected += DidConnect;
+            Client.ConnectionFailed += FailedToConnect;
+            Client.ClientDisconnected += PlayerLeft;
+            Client.Disconnected += DidDisconnect;
         }
 
-        public virtual void Register() {
-                  
+        private void FixedUpdate() {
+            if (Server.IsRunning)
+                Server.Update();
+
+            Client.Update();
         }
 
+        private void OnApplicationQuit() {
+            Server.Stop();
+            Client.Disconnect();
+        }
+
+        internal void StartHost() {
+            Server.Start(port, maxPlayers);
+            Client.Connect($"127.0.0.1:{port}");
+        }
+
+        internal void JoinGame(string ipString) {
+            Client.Connect($"{ipString}:{port}");
+        }
+
+        internal void LeaveGame() {
+            Server.Stop();
+            Client.Disconnect();
+        }
+
+        private void DidConnect(object sender, EventArgs e) {
+            Player.Spawn(Client.Id, UIManager.Singleton.Username, Vector3.zero, true);
+        }
+
+        private void FailedToConnect(object sender, EventArgs e) {
+            UIManager.Singleton.BackToMain();
+        }
+
+        private void PlayerJoined(object sender, ServerConnectedEventArgs e) {
+            foreach (Player player in Player.List.Values)
+                if (player.Id != e.Client.Id)
+                    player.SendSpawn(e.Client.Id);
+        }
+
+        private void PlayerLeft(object sender, ClientDisconnectedEventArgs e) {
+            Destroy(Player.List[e.Id].gameObject);
+        }
+
+        private void DidDisconnect(object sender, DisconnectedEventArgs e) {
+            foreach (Player player in Player.List.Values)
+                Destroy(player.gameObject);
+
+            UIManager.Singleton.BackToMain();
+        }
         public UnityEvent onStartServer, onStopServer, onStartClient, onStopClient;
         public override void OnStartServer() => onStartServer?.Invoke();
         public override void OnStartClient() => onStartClient?.Invoke();
         public override void OnStopServer() => onStopServer?.Invoke();
         public override void OnStopClient() => onStopClient?.Invoke();
-
+        */
     }
+        
 }
