@@ -1,6 +1,5 @@
 using KadenZombie8.BIMOS;
 using KadenZombie8.BIMOS.Rig;
-using Mirror;
 using UnityEngine;
 
 namespace KadenZombie8.BIMOS.Networking.Samples {
@@ -19,24 +18,14 @@ namespace KadenZombie8.BIMOS.Networking.Samples {
         }
 
         public void NewDeath() {
-            Deaths++;
-            RespawnRpc();
-        }
-
-        public void RespawnRpc() {
-            GamemodeMarker.SpawnPlayer(this);
         }
 
         public void RequestKill() {
-            Kills++;
+
         }
 
         public void RequestDamage(float damage) {
-            Health -= damage;
-            if (Health <= 0) {
-                NewDeath();
-            }
-            Health = Mathf.Clamp(Health, 0, MaxHealth);
+
         }
     }
 }

@@ -1,6 +1,5 @@
 using KadenZombie8.BIMOS.Rig;
 using KadenZombie8.BIMOS.Rig.Spawning;
-using Mirror;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -8,13 +7,13 @@ using UnityEngine;
 namespace KadenZombie8.BIMOS.Networking
 {
     [RequireComponent(typeof(BIMOSRig))]
-    public class NetworkRig : NetworkBehaviour
+    public class NetworkRig : MonoBehaviour
     {
         public BIMOSRig Rig {
             get; private set;
         }
-        [SyncVar] public HandInputReaderStruct LeftReaderStruct;
-        [SyncVar] public HandInputReaderStruct RightReaderStruct;
+        public HandInputReaderStruct LeftReaderStruct;
+        public HandInputReaderStruct RightReaderStruct;
         public HandInputReader LeftHandReader;
         public HandInputReader RightHandReader;
         private void Awake() {
@@ -22,8 +21,12 @@ namespace KadenZombie8.BIMOS.Networking
             Persistent.InvokeSpawn(Rig);
         }
 
+        public bool isLocalPlayer {
+            get;
+        }
+
         private void Start() {
-            if (!isLocalPlayer && NetworkManager.IsNetworkActive) {
+            if (isLocalPlayer) {
                 var cameras = GetComponents<Camera>().ToList();
                 foreach (var camera in cameras) {
                     Destroy(camera);
@@ -33,15 +36,6 @@ namespace KadenZombie8.BIMOS.Networking
                     component.enabled = false;
                 }
             }  
-        }
-        public override void OnStartLocalPlayer() {
-            base.OnStartLocalPlayer();
-            SpawnPointManager.Instance.LocalPlayer = Rig;
-            SpawnPointManager.Instance.Respawn(Rig);
-        }
-        protected override void OnValidate() {
-            base.OnValidate();
-            syncDirection = SyncDirection.ServerToClient;
         }
         private void Update() {
             if (isLocalPlayer) {     
@@ -55,7 +49,6 @@ namespace KadenZombie8.BIMOS.Networking
             }
         }
 
-        [Command]
         private void CmdUpdateReaders(HandInputReaderStruct leftReader, HandInputReaderStruct rightReader) {
             LeftReaderStruct = leftReader;
             RightReaderStruct = rightReader;
