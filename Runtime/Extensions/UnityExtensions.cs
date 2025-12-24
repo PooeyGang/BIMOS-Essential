@@ -56,5 +56,30 @@ namespace KadenZombie8.BIMOS
                 child.gameObject.SetLayerRecursively(layer);
             }
         }
+
+        public static Transform SyncToPose(this Transform transform, Transform pose) {
+            transform.position = pose.position;
+            transform.rotation = pose.rotation;
+            return transform;
+        }
+
+        public static Rigidbody SyncToPose(this Rigidbody rigidbody, Rigidbody pose) {
+            rigidbody.transform.SyncToPose(pose.transform);
+            rigidbody.linearVelocity = pose.linearVelocity;
+            rigidbody.angularVelocity = pose.angularVelocity;
+            return rigidbody;
+        }
+
+        public static Transform SyncToPose(this Transform transform, Rigidbody pose) {
+            transform.position = pose.transform.position;
+            transform.rotation = pose.transform.rotation;
+            return transform;
+        }
+
+        public static Rigidbody SyncToPose(this Rigidbody rigidbody, Transform pose) {
+            rigidbody.transform.position = pose.position;
+            rigidbody.transform.rotation = pose.rotation;
+            return rigidbody;
+        }
     }
 }

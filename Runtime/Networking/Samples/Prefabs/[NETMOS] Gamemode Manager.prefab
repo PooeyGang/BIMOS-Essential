@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[NETMOS] Gamemode Manager'
       objectReference: {fileID: 0}
+    - target: {fileID: 2871479844772139566, guid: a00c305d78b055a41aee87dd5d889252, type: 3}
+      propertyPath: spawnPrefabs.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2871479844772139566, guid: a00c305d78b055a41aee87dd5d889252, type: 3}
+      propertyPath: 'spawnPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 846927772191037339, guid: ca4c7733948d67045a6c423c6a0ca777, type: 3}
     - target: {fileID: 7639997166650147522, guid: a00c305d78b055a41aee87dd5d889252, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -52,7 +60,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3497297287860464535, guid: a00c305d78b055a41aee87dd5d889252, type: 3}
+    - {fileID: 5057884351961971407, guid: a00c305d78b055a41aee87dd5d889252, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

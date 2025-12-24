@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4850294539657462582}
-  - component: {fileID: 1869770601031704557}
+  - component: {fileID: 1315345410110774107}
   m_Layer: 0
   m_Name: Spawn Point Manager
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 8785661562156720667}
   m_Father: {fileID: 5289576401250805562}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1869770601031704557
+--- !u!114 &1315345410110774107
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,7 +42,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 752374277875949297}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d9dc499929aab24291e7f07c23c9bdd, type: 3}
+  m_Script: {fileID: 11500000, guid: 7eab55af28a7bff4b9937f2625954202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   LocalPlayer: {fileID: 0}
@@ -50,10 +50,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   SpawnPoint: {fileID: 3551183557532890213}
-  PlayerPrefab: {fileID: 8983264885845302948, guid: ca4c7733948d67045a6c423c6a0ca777, type: 3}
-  SingleRig: 1
+  PlayerPrefab: {fileID: 6671873013947755651, guid: 0f6a8eddd3b3f134cba43472c935bf29, type: 3}
+  SingleRig: 0
   AutoCreatePlayer: 1
-  PhysicsRigGrips: 1
 --- !u!1 &2982075419223860710
 GameObject:
   m_ObjectHideFlags: 0
