@@ -11,10 +11,12 @@
     "excludePlatforms": [],
     "allowUnsafeCode": true,
     "overrideReferences": true,
-    "precompiledReferences": [],
+    "precompiledReferences": [
+        "Newtonsoft.Json.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": [
-        "NETWORKING"
+        "MIRROR"
     ],
     "versionDefines": [],
     "noEngineReferences": false
