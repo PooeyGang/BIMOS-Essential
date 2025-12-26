@@ -1,19 +1,29 @@
 using UnityEngine;
+using Mirror;
+using KadenZombie8.Pooling;
 
 namespace KadenZombie8.BIMOS.Networking
 {
-    public class NetManager : MonoBehaviour
+    public class NetManager : NetworkManager
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-        
+        public static new NetManager singleton;
+        [Header("BIMOS Settings")]
+        public PoolConfig rigsPoolConfig;
+
+        public override void Awake() {
+            base.Awake();
+            singleton = this;
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-        
+        public void HostGame(int maxClients = 10, bool serverOnly = false) {
+            maxConnections = maxClients;
+            if(serverOnly) StartServer();
+            else StartHost();
+        }
+
+        public void JoinGame(string address) {
+            networkAddress = address;
+            StartClient();
         }
     }
 }
